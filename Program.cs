@@ -10,13 +10,13 @@ namespace nelio_dotnet
       Console.Write("Insira o valor: ");
       int n = int.Parse(Console.ReadLine());
 
-      int sum = 1;
-      for (int i = n; i > 0; i--)
+      for (int i = 1; i <= n; i++)
       {
-        sum *= i;
+        if (n % i == 0)
+        {
+          Console.WriteLine(i);
+        }
       }
-
-      Console.WriteLine(sum);
     }
   }
 }
