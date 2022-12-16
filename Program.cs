@@ -7,13 +7,25 @@ namespace nelio_dotnet
   {
     static void Main(string[] args)
     {
-      Console.Write("Insira o máximo: ");
-      int x = int.Parse(Console.ReadLine());
+      Console.Write("Insira a quantidade: ");
+      int n = int.Parse(Console.ReadLine());
 
-      for (int i = 1; i <= x; i += 2)
+      int inside = 0;
+      int outside = 0;
+
+      for (int i = 0; i < n; i++)
       {
-        Console.WriteLine(i);
+        int m = int.Parse(Console.ReadLine());
+        if (m >= 10 && m <= 20)
+        {
+          inside++;
+          continue;
+        }
+        outside++;
       }
+
+      Console.WriteLine($"{inside} in");
+      Console.WriteLine($"{outside} out");
     }
   }
 }
