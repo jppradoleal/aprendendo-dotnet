@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 namespace nelio_dotnet
 {
-  class Pessoa
+  class Employee
   {
     public string nome;
-    public int idade;
+    public float wage;
 
-    public Pessoa(string nome, int idade)
+    public Employee(string nome, float wage)
     {
       this.nome = nome;
-      this.idade = idade;
+      this.wage = wage;
     }
 
 
@@ -20,25 +20,18 @@ namespace nelio_dotnet
   {
     static void Main(string[] args)
     {
-      Pessoa[] pessoas = new Pessoa[2];
+      Employee[] employees = new Employee[2];
       for (int i = 0; i < 2; i++)
       {
         Console.WriteLine($"Dados do {i + 1}º funcionário");
         Console.Write("Nome: ");
         string name = Console.ReadLine();
-        Console.Write("Idade: ");
-        int age = int.Parse(Console.ReadLine());
-        pessoas[i] = new Pessoa(name, age);
+        Console.Write("Salário: ");
+        float wage = float.Parse(Console.ReadLine());
+        employees[i] = new Employee(name, wage);
       }
 
-      Pessoa older = pessoas[0];
-
-      if (pessoas[1].idade > older.idade)
-      {
-        older = pessoas[1];
-      }
-
-      Console.WriteLine($"Pessoa mais velha: {older.nome}");
+      Console.WriteLine($"Salário médio: {(employees[0].wage + employees[1].wage) / 2}");
     }
   }
 }
