@@ -7,15 +7,12 @@ namespace nelio_dotnet
   {
     static void Main(string[] args)
     {
-      Console.Write("Insira o valor: ");
+      Console.Write("Insira as linhas: ");
       int n = int.Parse(Console.ReadLine());
 
       for (int i = 1; i <= n; i++)
       {
-        if (n % i == 0)
-        {
-          Console.WriteLine(i);
-        }
+        Console.WriteLine($"{i} {Math.Pow(i, 2)} {Math.Pow(i, 3)}");
       }
     }
   }
