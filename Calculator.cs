@@ -2,16 +2,9 @@ namespace nelio_dotnet
 {
   class Calculator
   {
-    public static int Sum(params int[] nums)
+    public static int Triple(ref int x)
     {
-      int sum = 0;
-
-      foreach (int num in nums)
-      {
-        sum += num;
-      }
-
-      return sum;
+      x = x * 3;
     }
   }
 }

@@ -8,7 +8,9 @@ namespace nelio_dotnet
   {
     static void Main(string[] args)
     {
-      Console.WriteLine($"Sum of 5, 4, 3, 2, 1: {Calculator.Sum(5, 4, 3, 2, 1)}");
+      int a = 10;
+      Calculator.Triple(ref a);
+      Console.WriteLine(a);
     }
   }
 }
