@@ -2,9 +2,9 @@ namespace nelio_dotnet
 {
   class Calculator
   {
-    public static int Triple(ref int x)
+    public static void Triple(int origin, out int result)
     {
-      x = x * 3;
+      result = origin * 3;
     }
   }
 }
