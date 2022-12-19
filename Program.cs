@@ -8,47 +8,48 @@ namespace nelio_dotnet
   {
     static void Main(string[] args)
     {
-      Console.Write("Enter the department's name: ");
-      Department department = new Department { name = Console.ReadLine() };
+      Client client = new Client();
 
-      Console.WriteLine("\nEnter the worker data: ");
+      Console.WriteLine("Enter the client data: ");
+
       Console.Write("Name: ");
-      string workerName = Console.ReadLine();
+      client.name = Console.ReadLine();
 
-      Console.Write("Level (Junior, MidLevel, Senior): ");
-      WorkerLevel workerLevel = Enum.Parse<WorkerLevel>(Console.ReadLine());
+      Console.Write("Email: ");
+      client.email = Console.ReadLine();
 
-      Console.Write("Base salary: ");
-      double workerBaseSalary = double.Parse(Console.ReadLine());
+      Console.Write("Birth date (DD/MM/YYYY): ");
+      client.birthDate = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
 
-      Worker worker = new Worker(workerName, department, workerLevel, workerBaseSalary);
+      Console.WriteLine("\nEnter the order data: ");
+      Order order = new Order();
+      order.client = client;
 
-      Console.Write($"How many contracts {workerName} has? ");
-      int workerContractsAmount = int.Parse(Console.ReadLine());
+      Console.Write("Status: ");
+      order.status = Enum.Parse<OrderStatus>(Console.ReadLine());
 
-      for (int i = 0; i < workerContractsAmount; i++)
+      Console.Write("How many items to this order: ");
+      int n = int.Parse(Console.ReadLine());
+
+      for (int i = 0; i < n; i++)
       {
-        Console.WriteLine($"\nEnter #{i + 1} contract data: ");
-        Console.Write("Date (DD/MM/YYYY): ");
-        DateTime date = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
+        OrderItem orderItem = new OrderItem();
+        orderItem.product = new Product();
 
-        Console.Write("Value per hour: ");
-        double valuePerHour = double.Parse(Console.ReadLine());
+        Console.WriteLine($"\nEnter #{i + 1} item data: ");
+        Console.Write("Product name: ");
+        orderItem.product.name = Console.ReadLine();
 
-        Console.Write("Duration (hours): ");
-        int hours = int.Parse(Console.ReadLine());
+        Console.Write("Product price: ");
+        orderItem.product.price = double.Parse(Console.ReadLine());
 
-        worker.contracts.Add(new HourContract(date, valuePerHour, hours));
+        Console.Write("Quantity: ");
+        orderItem.quantity = int.Parse(Console.ReadLine());
+
+        order.AddItem(orderItem);
       }
 
-      Console.Write("\nEnter the month and year to calculate income (MM/YYYY): ");
-      DateTime filteredDate = DateTime.ParseExact(Console.ReadLine(), "MM/yyyy", null);
-
-      double totalIncomeForMonth = worker.Income(filteredDate.Year, filteredDate.Month);
-
-      Console.WriteLine($"Name: {worker.name}");
-      Console.WriteLine($"Department: {worker.department.name}");
-      Console.WriteLine($"Income for {filteredDate.Month}/{filteredDate.Year}: {totalIncomeForMonth}");
+      Console.WriteLine($"\n{order}");
     }
   }
 }
