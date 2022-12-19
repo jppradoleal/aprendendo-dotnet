@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Globalization;
-using System.Collections.Generic;
-using System.Linq;
+using nelio_dotnet.Entities;
+using nelio_dotnet.Entities.Enums;
 
 namespace nelio_dotnet
 {
@@ -9,58 +8,47 @@ namespace nelio_dotnet
   {
     static void Main(string[] args)
     {
-      Console.Write("Digite o numero de linhas e colunas: ");
-      string[] dimensions = Console.ReadLine().Split(" ");
-      int w = int.Parse(dimensions[0]);
-      int h = int.Parse(dimensions[1]);
+      Console.Write("Enter the department's name: ");
+      Department department = new Department { name = Console.ReadLine() };
 
-      int[,] matrix = new int[w, h];
+      Console.WriteLine("\nEnter the worker data: ");
+      Console.Write("Name: ");
+      string workerName = Console.ReadLine();
 
-      for (int i = 0; i < w; i++)
+      Console.Write("Level (Junior, MidLevel, Senior): ");
+      WorkerLevel workerLevel = Enum.Parse<WorkerLevel>(Console.ReadLine());
+
+      Console.Write("Base salary: ");
+      double workerBaseSalary = double.Parse(Console.ReadLine());
+
+      Worker worker = new Worker(workerName, department, workerLevel, workerBaseSalary);
+
+      Console.Write($"How many contracts {workerName} has? ");
+      int workerContractsAmount = int.Parse(Console.ReadLine());
+
+      for (int i = 0; i < workerContractsAmount; i++)
       {
-        Console.Write($"Digite os elementos da linha #{i + 1}: ");
-        int[] numeros = Console.ReadLine().Split(" ").Select(x => int.Parse(x)).ToArray();
+        Console.WriteLine($"\nEnter #{i + 1} contract data: ");
+        Console.Write("Date (DD/MM/YYYY): ");
+        DateTime date = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
 
-        for (int j = 0; j < h; j++)
-        {
-          matrix[i, j] = numeros[j];
-        }
+        Console.Write("Value per hour: ");
+        double valuePerHour = double.Parse(Console.ReadLine());
+
+        Console.Write("Duration (hours): ");
+        int hours = int.Parse(Console.ReadLine());
+
+        worker.contracts.Add(new HourContract(date, valuePerHour, hours));
       }
 
-      Console.Write("Digite o número que deseja buscar: ");
-      int target = int.Parse(Console.ReadLine());
+      Console.Write("\nEnter the month and year to calculate income (MM/YYYY): ");
+      DateTime filteredDate = DateTime.ParseExact(Console.ReadLine(), "MM/yyyy", null);
 
-      for (int i = 0; i < w; i++)
-      {
-        for (int j = 0; j < h; j++)
-        {
-          if (matrix[i, j] == target)
-          {
-            Console.WriteLine($"Position {i},{j}:");
-            Program.PrintNeighbours(matrix, j, i);
-          }
-        }
-      }
-    }
+      double totalIncomeForMonth = worker.Income(filteredDate.Year, filteredDate.Month);
 
-    static void PrintNeighbours(int[,] matrix, int posX, int posY)
-    {
-      if (posY > 0)
-      {
-        Console.WriteLine($"Up: {matrix[posY - 1, posX]}");
-      }
-      if (posX < matrix.GetLength(0) - 1)
-      {
-        Console.WriteLine($"Right: {matrix[posY, posX + 1]}");
-      }
-      if (posY < matrix.GetLength(1) - 1)
-      {
-        Console.WriteLine($"Down: {matrix[posY + 1, posX]}");
-      }
-      if (posX > 0)
-      {
-        Console.WriteLine($"Left: {matrix[posY, posX - 1]}");
-      }
+      Console.WriteLine($"Name: {worker.name}");
+      Console.WriteLine($"Department: {worker.department.name}");
+      Console.WriteLine($"Income for {filteredDate.Month}/{filteredDate.Year}: {totalIncomeForMonth}");
     }
   }
 }
