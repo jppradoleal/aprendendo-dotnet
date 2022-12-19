@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace nelio_dotnet
 {
@@ -8,48 +9,57 @@ namespace nelio_dotnet
   {
     static void Main(string[] args)
     {
-      Console.Write("How many employees will be registered: ");
-      int n = int.Parse(Console.ReadLine());
+      Console.Write("Digite o numero de linhas e colunas: ");
+      string[] dimensions = Console.ReadLine().Split(" ");
+      int w = int.Parse(dimensions[0]);
+      int h = int.Parse(dimensions[1]);
 
-      List<Employee> employees = new List<Employee>();
+      int[,] matrix = new int[w, h];
 
-      for (int i = 0; i < n; i++)
+      for (int i = 0; i < w; i++)
       {
-        Console.WriteLine($"\nEmployee #{i + 1} ");
+        Console.Write($"Digite os elementos da linha #{i + 1}: ");
+        int[] numeros = Console.ReadLine().Split(" ").Select(x => int.Parse(x)).ToArray();
 
-        Console.Write("Id: ");
-        int eId = int.Parse(Console.ReadLine());
-
-        Console.Write("Name: ");
-        string name = Console.ReadLine();
-
-        Console.Write("Salary: ");
-        double salary = double.Parse(Console.ReadLine());
-
-        employees.Add(new Employee(eId, name, salary));
+        for (int j = 0; j < h; j++)
+        {
+          matrix[i, j] = numeros[j];
+        }
       }
 
-      Console.Write("\nEnter the employee id that will have salary increase: ");
-      int id = int.Parse(Console.ReadLine());
+      Console.Write("Digite o número que deseja buscar: ");
+      int target = int.Parse(Console.ReadLine());
 
-      Console.Write("Enter the percentage: ");
-
-      Employee luckyGuy = employees.Find(x => x.Id == id);
-
-      if (luckyGuy != null)
+      for (int i = 0; i < w; i++)
       {
-        double percentage = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
-        luckyGuy.IncreaseSalary(percentage);
+        for (int j = 0; j < h; j++)
+        {
+          if (matrix[i, j] == target)
+          {
+            Console.WriteLine($"Position {i},{j}:");
+            Program.PrintNeighbours(matrix, j, i);
+          }
+        }
       }
-      else
-      {
-        Console.WriteLine("This id doesn't exists");
-      }
+    }
 
-      Console.WriteLine("\nUpdated list of employees");
-      foreach (Employee employee in employees)
+    static void PrintNeighbours(int[,] matrix, int posX, int posY)
+    {
+      if (posY > 0)
       {
-        Console.WriteLine(employee);
+        Console.WriteLine($"Up: {matrix[posY - 1, posX]}");
+      }
+      if (posX < matrix.GetLength(0) - 1)
+      {
+        Console.WriteLine($"Right: {matrix[posY, posX + 1]}");
+      }
+      if (posY < matrix.GetLength(1) - 1)
+      {
+        Console.WriteLine($"Down: {matrix[posY + 1, posX]}");
+      }
+      if (posX > 0)
+      {
+        Console.WriteLine($"Left: {matrix[posY, posX - 1]}");
       }
     }
   }
