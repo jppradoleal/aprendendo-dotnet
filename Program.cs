@@ -8,42 +8,61 @@ namespace nelio_dotnet
   {
     static void Main(string[] args)
     {
-      Console.Write("Enter the number of employees: ");
+      Console.Write("Enter the number of products: ");
       int n = int.Parse(Console.ReadLine());
 
-      List<Employee> employees = new List<Employee>();
+      List<Product> products = new List<Product>();
 
       for (int i = 0; i < n; i++)
       {
-        Console.WriteLine($"\nEmployee #{i + 1} data: ");
-        Console.Write("Outsourced (y/n)? ");
-        bool isOutsourced = Console.ReadLine().Equals("y");
+        Console.WriteLine($"\nProduct #{i + 1} data: ");
+        Console.Write("Common, used or imported (c/u/i)? ");
+        string type = Console.ReadLine();
 
-        Employee e = isOutsourced ? new OutsourcedEmployee() : new Employee();
+        Product p;
 
-        Console.Write("Name: ");
-        e.name = Console.ReadLine();
-
-        Console.Write("Hours: ");
-        e.hours = int.Parse(Console.ReadLine());
-
-        Console.Write("Value per hour: ");
-        e.valuePerHour = double.Parse(Console.ReadLine());
-
-        if (isOutsourced)
+        if (type.Equals("c"))
         {
-          Console.Write("Additional charge: ");
-          ((OutsourcedEmployee)e).additionalCharge = double.Parse(Console.ReadLine());
+          p = new Product();
+        }
+        else if (type.Equals("u"))
+        {
+          p = new UsedProduct();
+        }
+        else if (type.Equals("i"))
+        {
+          p = new ImportedProduct();
+        }
+        else
+        {
+          throw new ArgumentException("Type unrecognizable");
         }
 
-        employees.Add(e);
+        Console.Write("Name: ");
+        p.name = Console.ReadLine();
+
+        Console.Write("Price: ");
+        p.price = double.Parse(Console.ReadLine());
+
+        if (p is UsedProduct)
+        {
+          Console.Write("Manufacture date (dd/MM/yyyy): ");
+          ((UsedProduct)p).manufactureDate = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
+        }
+        else if (p is ImportedProduct)
+        {
+          Console.Write("Custom fee: ");
+          ((ImportedProduct)p).customFee = double.Parse(Console.ReadLine());
+        }
+
+        products.Add(p);
       }
 
-      Console.WriteLine("\nPAYMENTS:");
+      Console.WriteLine("\nPRICE TAGS:");
 
-      foreach (Employee e in employees)
+      foreach (Product p in products)
       {
-        Console.WriteLine(e);
+        Console.WriteLine(p);
       }
     }
   }
