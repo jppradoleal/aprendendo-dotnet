@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using nelio_dotnet.Entities;
 
@@ -8,62 +9,63 @@ namespace nelio_dotnet
   {
     static void Main(string[] args)
     {
-      Console.Write("Enter the number of products: ");
+      Console.Write("Enter the number of tax payers: ");
       int n = int.Parse(Console.ReadLine());
 
-      List<Product> products = new List<Product>();
+      List<TaxPayer> taxPayers = new List<TaxPayer>();
 
       for (int i = 0; i < n; i++)
       {
-        Console.WriteLine($"\nProduct #{i + 1} data: ");
-        Console.Write("Common, used or imported (c/u/i)? ");
-        string type = Console.ReadLine();
+        Console.WriteLine($"\nTax payer #{i + 1} data");
 
-        Product p;
+        TaxPayer p;
 
-        if (type.Equals("c"))
+        Console.Write("Individual or company? ");
+        bool isIndividual = Console.ReadLine().Equals("i");
+
+        if (isIndividual)
         {
-          p = new Product();
-        }
-        else if (type.Equals("u"))
-        {
-          p = new UsedProduct();
-        }
-        else if (type.Equals("i"))
-        {
-          p = new ImportedProduct();
+          p = new Individual();
         }
         else
         {
-          throw new ArgumentException("Type unrecognizable");
+          p = new Company();
         }
 
         Console.Write("Name: ");
         p.name = Console.ReadLine();
 
-        Console.Write("Price: ");
-        p.price = double.Parse(Console.ReadLine());
+        Console.Write("Anual income: ");
+        p.anualIncome = double.Parse(Console.ReadLine());
 
-        if (p is UsedProduct)
+        if (p is Individual)
         {
-          Console.Write("Manufacture date (dd/MM/yyyy): ");
-          ((UsedProduct)p).manufactureDate = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
+          Console.Write("Health expenditures? ");
+          ((Individual)p).healthExpenditures = double.Parse(Console.ReadLine());
         }
-        else if (p is ImportedProduct)
+        else if (p is Company)
         {
-          Console.Write("Custom fee: ");
-          ((ImportedProduct)p).customFee = double.Parse(Console.ReadLine());
+          Console.Write("Number of employees? ");
+          ((Company)p).employeesAmount = int.Parse(Console.ReadLine());
+        }
+        else
+        {
+          throw new ArgumentException("Invalid type");
         }
 
-        products.Add(p);
+        taxPayers.Add(p);
       }
 
-      Console.WriteLine("\nPRICE TAGS:");
+      Console.WriteLine("\nTAXES PAID:");
 
-      foreach (Product p in products)
+      foreach (TaxPayer p in taxPayers)
       {
         Console.WriteLine(p);
       }
+
+      double total = taxPayers.Aggregate(0d, (total, payer) => total += payer.CalcularImposto());
+
+      Console.WriteLine($"\nTOTAL TAXES: $ {total}");
     }
   }
 }
